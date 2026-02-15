@@ -1802,3 +1802,42 @@ section {
 ::-webkit-scrollbar-thumb:hover {
     background: var(--primary-dark);
 }
+
+/* ===============================
+   더 많은 성과물: 가로 스크롤 + 드래그 UX
+=============================== */
+#portfolio-grid {
+  display: flex;
+  gap: 16px;                 /* 원래 간격에 맞게 조절 가능 */
+  overflow-x: auto;
+  overflow-y: hidden;
+  flex-wrap: nowrap;
+  -webkit-overflow-scrolling: touch;
+
+  scroll-snap-type: x mandatory;  /* 스냅(선택) */
+  padding-bottom: 8px;            /* 스크롤바 공간 */
+}
+
+#portfolio-grid .portfolio-item {
+  flex: 0 0 auto;
+  width: 280px;               /* 카드 폭: 원하면 240~360 조절 */
+  scroll-snap-align: start;   /* 스냅(선택) */
+}
+
+/* 공통 드래그 UX (캐러셀 + 그리드 모두) */
+#carousel-wrapper,
+#portfolio-grid {
+  user-select: none;
+  -webkit-user-drag: none;
+  cursor: grab;
+}
+
+#carousel-wrapper.is-dragging,
+#portfolio-grid.is-dragging {
+  cursor: grabbing;
+}
+
+#carousel-wrapper.is-dragging a,
+#portfolio-grid.is-dragging a {
+  pointer-events: none;  /* 드래그 중 링크 오작동 방지 */
+}
