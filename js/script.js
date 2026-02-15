@@ -635,74 +635,61 @@ window.addEventListener('load', () => {
 });
 
 // ===============================
-// Portfolio Carousel: drag to scroll (mouse/touch)
+// Drag to scroll (mouse/touch) for multiple horizontal containers
+// 적용 대상: #carousel-wrapper, #portfolio-grid
 // ===============================
 (function () {
-  const slider = document.getElementById("carousel-wrapper");
-  if (!slider) return;
+  function enableDragScroll(container) {
+    if (!container) return;
 
-  let isDown = false;
-  let startX = 0;
-  let startScrollLeft = 0;
+    let isDown = false;
+    let startX = 0;
+    let startScrollLeft = 0;
+    let moved = false;
 
-  // 드래그 중 텍스트 선택 방지 + 커서 느낌
-  slider.style.cursor = "grab";
+    container.style.cursor = "grab";
 
-  const onDown = (pageX) => {
-    isDown = true;
-    slider.classList.add("is-dragging");
-    slider.style.cursor = "grabbing";
-    startX = pageX;
-    startScrollLeft = slider.scrollLeft;
-  };
+    const onDown = (pageX) => {
+      isDown = true;
+      moved = false;
+      container.classList.add("is-dragging");
+      container.style.cursor = "grabbing";
+      startX = pageX;
+      startScrollLeft = container.scrollLeft;
+    };
 
-  const onMove = (pageX) => {
-    if (!isDown) return;
-    const walk = (pageX - startX) * 1.2; // 1.2는 감도(원하면 1.0~2.0)
-    slider.scrollLeft = startScrollLeft - walk;
-  };
+    const onMove = (pageX) => {
+      if (!isDown) return;
+      const walk = (pageX - startX) * 1.2; // 감도
+      if (Math.abs(walk) > 2) moved = true;
+      container.scrollLeft = startScrollLeft - walk;
+    };
 
-  const onUp = () => {
-    isDown = false;
-    slider.classList.remove("is-dragging");
-    slider.style.cursor = "grab";
-  };
+    const onUp = () => {
+      isDown = false;
+      container.classList.remove("is-dragging");
+      container.style.cursor = "grab";
+    };
 
-  // ✅ 마우스 드래그
-  slider.addEventListener("mousedown", (e) => {
-    // 링크/버튼 클릭은 정상 동작하도록: drag 시작만 하고 클릭은 아래에서 처리
-    onDown(e.pageX);
-  });
+    // Mouse
+    container.addEventListener("mousedown", (e) => onDown(e.pageX));
+    container.addEventListener("mousemove", (e) => onMove(e.pageX));
+    container.addEventListener("mouseleave", onUp);
+    window.addEventListener("mouseup", onUp);
 
-  slider.addEventListener("mousemove", (e) => onMove(e.pageX));
-  slider.addEventListener("mouseleave", onUp);
-  window.addEventListener("mouseup", onUp);
+    // Touch
+    container.addEventListener("touchstart", (e) => onDown(e.touches[0].pageX), { passive: true });
+    container.addEventListener("touchmove", (e) => onMove(e.touches[0].pageX), { passive: true });
+    container.addEventListener("touchend", onUp);
 
-  // ✅ 모바일/터치 드래그
-  slider.addEventListener(
-    "touchstart",
-    (e) => onDown(e.touches[0].pageX),
-    { passive: true }
-  );
-  slider.addEventListener(
-    "touchmove",
-    (e) => onMove(e.touches[0].pageX),
-    { passive: true }
-  );
-  slider.addEventListener("touchend", onUp);
-
-  // ✅ 드래그로 스크롤할 때 링크가 '실수로 클릭'되는 걸 막아줌
-  let moved = false;
-  slider.addEventListener("mousedown", () => (moved = false));
-  slider.addEventListener("mousemove", () => {
-    if (isDown) moved = true;
-  });
-
-  slider.querySelectorAll("a").forEach((a) => {
-    a.addEventListener("click", (e) => {
-      // 드래그로 움직였으면 클릭 취소
-      if (moved) e.preventDefault();
+    // Prevent accidental link click after drag
+    container.querySelectorAll("a").forEach((a) => {
+      a.addEventListener("click", (e) => {
+        if (moved) e.preventDefault();
+      });
     });
-  });
-})();
+  }
 
+  enableDragScroll(document.getElementById("carousel-wrapper"));
+  enableDragScroll(document.getElementById("portfolio-grid"));
+})();
