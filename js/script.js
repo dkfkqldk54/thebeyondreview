@@ -633,3 +633,76 @@ window.addEventListener('load', () => {
         resources: performance.getEntriesByType('resource').length
     });
 });
+
+// ===============================
+// Portfolio Carousel: drag to scroll (mouse/touch)
+// ===============================
+(function () {
+  const slider = document.getElementById("carousel-wrapper");
+  if (!slider) return;
+
+  let isDown = false;
+  let startX = 0;
+  let startScrollLeft = 0;
+
+  // 드래그 중 텍스트 선택 방지 + 커서 느낌
+  slider.style.cursor = "grab";
+
+  const onDown = (pageX) => {
+    isDown = true;
+    slider.classList.add("is-dragging");
+    slider.style.cursor = "grabbing";
+    startX = pageX;
+    startScrollLeft = slider.scrollLeft;
+  };
+
+  const onMove = (pageX) => {
+    if (!isDown) return;
+    const walk = (pageX - startX) * 1.2; // 1.2는 감도(원하면 1.0~2.0)
+    slider.scrollLeft = startScrollLeft - walk;
+  };
+
+  const onUp = () => {
+    isDown = false;
+    slider.classList.remove("is-dragging");
+    slider.style.cursor = "grab";
+  };
+
+  // ✅ 마우스 드래그
+  slider.addEventListener("mousedown", (e) => {
+    // 링크/버튼 클릭은 정상 동작하도록: drag 시작만 하고 클릭은 아래에서 처리
+    onDown(e.pageX);
+  });
+
+  slider.addEventListener("mousemove", (e) => onMove(e.pageX));
+  slider.addEventListener("mouseleave", onUp);
+  window.addEventListener("mouseup", onUp);
+
+  // ✅ 모바일/터치 드래그
+  slider.addEventListener(
+    "touchstart",
+    (e) => onDown(e.touches[0].pageX),
+    { passive: true }
+  );
+  slider.addEventListener(
+    "touchmove",
+    (e) => onMove(e.touches[0].pageX),
+    { passive: true }
+  );
+  slider.addEventListener("touchend", onUp);
+
+  // ✅ 드래그로 스크롤할 때 링크가 '실수로 클릭'되는 걸 막아줌
+  let moved = false;
+  slider.addEventListener("mousedown", () => (moved = false));
+  slider.addEventListener("mousemove", () => {
+    if (isDown) moved = true;
+  });
+
+  slider.querySelectorAll("a").forEach((a) => {
+    a.addEventListener("click", (e) => {
+      // 드래그로 움직였으면 클릭 취소
+      if (moved) e.preventDefault();
+    });
+  });
+})();
+
