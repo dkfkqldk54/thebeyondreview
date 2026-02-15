@@ -515,7 +515,7 @@ section {
 .package-features li,
 .package-excluded li {
     padding: 8px 0;
-    padding-left: 24px;
+    padding-left: 28px;   /* ✅ 24 -> 28 */
     position: relative;
     font-size: 15px;
     line-height: 1.6;
@@ -524,18 +524,23 @@ section {
 .package-features li::before {
     content: '✓';
     position: absolute;
-    left: 0;
+    left: 4px;            /* ✅ 0 -> 4 */
+    top: 8px;             /* ✅ 추가 */
     color: var(--accent-color);
     font-weight: 700;
+    font-size: 16px;      /* ✅ 추가 */
 }
 
 .package-excluded li::before {
     content: '✗';
     position: absolute;
-    left: 0;
+    left: 4px;            /* ✅ 0 -> 4 */
+    top: 8px;             /* ✅ 추가 */
     color: #EF4444;
     font-weight: 700;
+    font-size: 16px;      /* ✅ 추가 */
 }
+
 
 .package-info {
     background-color: var(--bg-light);
@@ -1608,11 +1613,12 @@ section {
         padding: 20px;
     }
 
-    .package-card .package-body ul li {
-        font-size: 13px;
-        padding: 8px 0;
-        line-height: 1.4;
-    }
+   .package-card .package-body ul li {
+       font-size: 13px;
+       padding: 8px 0;
+       padding-left: 28px;  /* ✅ 추가 */
+       line-height: 1.5;    /* ✅ 1.4 -> 1.5 */
+   }
 
     .package-card .package-footer {
         padding: 20px;
