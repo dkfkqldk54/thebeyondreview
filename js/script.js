@@ -110,7 +110,7 @@ async function saveToDatabase(data) {
 💬 메시지: ${data.message || 'N/A'}
 ⏰ 신청 시간: ${new Date().toLocaleString('ko-KR')}`;
         
-        await fetch('https://api.telegram.org/bot8407881968:AAGgwdEfCMYTz7cYQy8aKj8cC7mLd9TlMiQ/sendMessage', {
+        await fetch('https://cors-anywhere.herokuapp.com/https://api.telegram.org/bot8407881968:AAGgwdEfCMYTz7cYQy8aKj8cC7mLd9TlMiQ/sendMessage', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
