@@ -106,7 +106,7 @@ async function saveToDatabase(data) {
         console.log('✅ Firebase 저장 완료:', newRef.key);
         
         // 2️⃣ Google Apps Script를 통해 Telegram 전송
-        const response = await fetch('https://script.google.com/macros/s/AKfycbyjdESMeYltdUe5raTvAdYW6uVRnwSASwxhIgMBEWzSqQJrWbZrLxAT0YXHpR_30Z4lWg/exec', {
+        const response = await fetch('https://script.google.com/macros/s/AKfycbyKIolOQRbT95A-qTOZNlCXckkYVvFhLIcrG_1UZIib5Lp30FExYUDvqIu5rNjJp6nhIw/exec', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
