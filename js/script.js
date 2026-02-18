@@ -351,17 +351,17 @@ on(loadMoreBtn, 'click', () => {
 
     const portfolioItem = document.createElement('div');
     portfolioItem.className = 'portfolio-item fade-in-up';
-    portfolioItem.innerHTML = `
-      <div class="portfolio-thumbnail">
-        <i class="fas fa-play-circle"></i>
-        <div class="portfolio-overlay">
-          <div class="portfolio-stats">
-            <span class="views">👁️ ${item.views}</span>
-            <span class="location">📍 ${item.location}</span>
-          </div>
-        </div>
-      </div>
-    `;
+    
+    portfolioItem.innerHTML =
+      '<div class="portfolio-thumbnail">' +
+      '<i class="fas fa-play-circle"></i>' +
+      '<div class="portfolio-overlay">' +
+      '<div class="portfolio-stats">' +
+      '<span class="views">👁️ ' + item.views + '</span>' +
+      '<span class="location">📍 ' + item.location + '</span>' +
+      '</div>' +
+      '</div>' +
+      '</div>';
     portfolioGrid.appendChild(portfolioItem);
   }
 
