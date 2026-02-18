@@ -95,7 +95,7 @@ async function saveToDatabase(data) {
     const submitBtn = contactForm.querySelector('button[type="submit"]');
     if (submitBtn) {
       submitBtn.disabled = true;
-      submitBtn.textContent = '신청 중...';
+      submitBtn.textContent = '신청 중...';  // ✅ 수정됨
     }
 
     const dbData = {
@@ -115,7 +115,7 @@ async function saveToDatabase(data) {
     await newRef.set(dbData);
     console.log('✅ Firebase 저장 완료:', newRef.key);
 
-    // 2️⃣ Google Apps Script로 Telegram 전송 (CORS 회피: form-urlencoded + no-cors)
+    // 2️⃣ Google Apps Script로 Telegram 전송
     try {
       const url = 'https://script.google.com/macros/s/AKfycbyKIolOQRbT95A-qTOZNlCXckkYVvFhLIcrG_1UZIib5Lp30FExYUDvqIu5rNjJp6nhIw/exec';
 
@@ -156,7 +156,7 @@ async function saveToDatabase(data) {
       const submitBtn = contactForm.querySelector('button[type="submit"]');
       if (submitBtn) {
         submitBtn.disabled = false;
-        submitBtn.textContent = '신청하기';
+        submitBtn.textContent = '신청하기';  // ✅ 수정됨 - 다시 원래대로
       }
     }
   }
