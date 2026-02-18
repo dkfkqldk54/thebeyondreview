@@ -1853,3 +1853,22 @@ section {
   touch-action: pan-y; /* 세로 스크롤은 살리고 가로 드래그만 허용 */
 }
 
+/* ===============================
+   포트폴리오/캐러셀 클릭 우선순위 개선
+=============================== */
+
+#carousel-wrapper a,
+#portfolio-grid a {
+  pointer-events: auto;  /* 명시적으로 클릭 가능하게 설정 */
+}
+
+#carousel-wrapper.is-dragging a,
+#portfolio-grid.is-dragging a {
+  pointer-events: none;  /* 드래그 중에만 비활성화 */
+}
+
+/* 터치 디바이스에서 더블탭 확대 방지 */
+#carousel-wrapper a,
+#portfolio-grid a {
+  touch-action: manipulation;
+}
