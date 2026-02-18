@@ -116,7 +116,6 @@ async function saveToDatabase(data) {
     console.log('✅ Firebase 저장 완료:', newRef.key);
 
     // 2️⃣ Google Apps Script로 Telegram 전송 (CORS 회피: form-urlencoded + no-cors)
-    //    ✅ 실패해도 Firebase 저장은 성공이므로 전체 실패로 만들지 않음
     try {
       const url = 'https://script.google.com/macros/s/AKfycbyKIolOQRbT95A-qTOZNlCXckkYVvFhLIcrG_1UZIib5Lp30FExYUDvqIu5rNjJp6nhIw/exec';
 
@@ -162,7 +161,6 @@ async function saveToDatabase(data) {
     }
   }
 }
-
 
 // ========== 폼 검증 및 제출 ==========
 on(contactForm, 'submit', (e) => {
@@ -263,7 +261,6 @@ on(loadMoreBtn, 'click', () => {
     const portfolioItem = document.createElement('div');
     portfolioItem.className = 'portfolio-item fade-in-up';
 
-    // ✅ 템플릿리터럴 대신 문자열 결합 (구형 브라우저/빌드 이슈 방지)
     portfolioItem.innerHTML =
       '<div class="portfolio-thumbnail">' +
         '<i class="fas fa-play-circle"></i>' +
@@ -303,7 +300,6 @@ if ('IntersectionObserver' in window) {
 
   animateElements.forEach(el => observer.observe(el));
 } else {
-  // 구형 브라우저 폴백
   animateElements.forEach(el => el.classList.add('fade-in-up'));
 }
 
@@ -473,8 +469,8 @@ console.log(
   "║       릴스 마케팅 전문 에이전시               ║\n" +
   "║                                              ║\n" +
   "║  개발: AI Developer                          ║\n" +
-  "║  버전: 1.0.0                                 ║\n" +
-  "║  날짜: 2026-02-14                            ║\n" +
+  "║  버전: 1.0.0 (안전한 드래그 방식)            ║\n" +
+  "║  날짜: 2026-02-18                            ║\n" +
   "╚══════════════════════════════════════════════╝"
 );
 
@@ -528,8 +524,8 @@ window.addEventListener('load', () => {
 });
 
 // ===============================
-// Drag to scroll (mouse/touch) for multiple horizontal containers
-// 적용 대상: #carousel-wrapper, #portfolio-grid
+// ✅ 안전한 드래그-투-스크롤 (최신 방식)
+// 포트폴리오, 캐러셀에 적용
 // ===============================
 (function () {
   function enableDragScroll(container) {
@@ -537,59 +533,149 @@ window.addEventListener('load', () => {
 
     let isDown = false;
     let startX = 0;
+    let startY = 0;
     let startScrollLeft = 0;
-    let moved = false;
+    let isDragging = false;
+    
+    const DRAG_THRESHOLD = 10;  // 10px 이상 움직여야 드래그로 인정
 
     container.style.cursor = "grab";
 
-    const onDown = (pageX) => {
+    // ===== 마우스 이벤트 =====
+    container.addEventListener("mousedown", (e) => {
       isDown = true;
-      moved = false;
-      container.classList.add("is-dragging");
-      container.style.cursor = "grabbing";
-      startX = pageX;
+      isDragging = false;
+      startX = e.pageX;
+      startY = e.pageY;
       startScrollLeft = container.scrollLeft;
-    };
+      container.style.cursor = "grabbing";
+    });
 
-    const onMove = (pageX) => {
+    container.addEventListener("mousemove", (e) => {
       if (!isDown) return;
-      const walk = pageX - startX;
-    
-      // 👉 10px 이상 움직여야 드래그로 판단
-      if (Math.abs(walk) > 10) moved = true;
-    
-      container.scrollLeft = startScrollLeft - walk * 1.2;
+
+      const walkX = e.pageX - startX;
+      const walkY = e.pageY - startY;
+
+      // ✅ 가로 드래그만 감지 (세로 스크롤과 구분)
+      if (Math.abs(walkX) > DRAG_THRESHOLD && Math.abs(walkX) > Math.abs(walkY)) {
+        isDragging = true;
+        container.classList.add("is-dragging");
+        container.scrollLeft = startScrollLeft - walkX * 1.2;
+      }
+    });
+
+    // 마우스 업
+    const onMouseUp = () => {
+      if (isDown) {
+        isDown = false;
+        container.style.cursor = "grab";
+        
+        // 드래그 완료 후 상태 초기화
+        if (isDragging) {
+          container.classList.remove("is-dragging");
+          isDragging = false;
+          
+          // 100ms 후 모든 링크의 드래그 상태 해제
+          setTimeout(() => {
+            container.querySelectorAll("a").forEach(link => {
+              link.dataset.dragged = "false";
+            });
+          }, 100);
+        }
+      }
     };
 
-    const onUp = () => {
-      isDown = false;
-      container.classList.remove("is-dragging");
-      container.style.cursor = "grab";
-      // moved는 유지해도 되지만, 클릭 리셋까지 하면 더 안전
-      // moved = false;  // (선택) 클릭에서 리셋하면 이건 없어도 됨
+    container.addEventListener("mouseleave", onMouseUp);
+    document.addEventListener("mouseup", onMouseUp);
+
+    // ===== 터치 이벤트 =====
+    container.addEventListener("touchstart", (e) => {
+      isDown = true;
+      isDragging = false;
+      startX = e.touches[0].pageX;
+      startY = e.touches[0].pageY;
+      startScrollLeft = container.scrollLeft;
+    }, { passive: true });
+
+    container.addEventListener("touchmove", (e) => {
+      if (!isDown) return;
+
+      const walkX = e.touches[0].pageX - startX;
+      const walkY = e.touches[0].pageY - startY;
+
+      // ✅ 가로 드래그만 감지
+      if (Math.abs(walkX) > DRAG_THRESHOLD && Math.abs(walkX) > Math.abs(walkY)) {
+        isDragging = true;
+        container.classList.add("is-dragging");
+        container.scrollLeft = startScrollLeft - walkX * 1.2;
+      }
+    }, { passive: true });
+
+    const onTouchEnd = () => {
+      if (isDown) {
+        isDown = false;
+        
+        if (isDragging) {
+          container.classList.remove("is-dragging");
+          isDragging = false;
+          
+          // 100ms 후 모든 링크의 드래그 상태 해제
+          setTimeout(() => {
+            container.querySelectorAll("a").forEach(link => {
+              link.dataset.dragged = "false";
+            });
+          }, 100);
+        }
+      }
     };
 
-    // Mouse
-    container.addEventListener("mousedown", (e) => onDown(e.pageX));
-    container.addEventListener("mousemove", (e) => onMove(e.pageX));
-    container.addEventListener("mouseleave", onUp);
-    window.addEventListener("mouseup", onUp);
+    container.addEventListener("touchend", onTouchEnd, { passive: true });
 
-    // Touch
-    container.addEventListener("touchstart", (e) => onDown(e.touches[0].pageX), { passive: true });
-    container.addEventListener("touchmove", (e) => onMove(e.touches[0].pageX), { passive: true });
-    container.addEventListener("touchend", onUp);
+    // ===== 링크 클릭 이벤트 =====
+    container.querySelectorAll("a").forEach((link) => {
+      // 초기 상태 설정
+      link.dataset.dragged = "false";
 
-    container.querySelectorAll("a").forEach((a) => {
-      a.addEventListener("click", (e) => {
-        if (moved) {
+      // 클릭 이벤트
+      link.addEventListener("click", (e) => {
+        // 드래그 중에만 기본 동작 차단
+        if (isDragging || link.dataset.dragged === "true") {
           e.preventDefault();
-          moved = false; // ✅ 다음 정상 클릭을 위해 리셋
+          e.stopPropagation();
+          link.dataset.dragged = "false";
+          console.log("🔒 드래그 감지됨 - 클릭 차단");
+        } else {
+          console.log("✅ 정상 클릭 - 링크 실행");
         }
       });
+
+      // 마우스 다운 시 드래그 여부 표시
+      link.addEventListener("mousedown", () => {
+        if (isDragging) {
+          link.dataset.dragged = "true";
+        }
+      });
+
+      // 터치 무브 시 드래그 여부 표시
+      link.addEventListener("touchmove", () => {
+        if (isDragging) {
+          link.dataset.dragged = "true";
+        }
+      }, { passive: true });
     });
   }
 
-  enableDragScroll(document.getElementById("carousel-wrapper"));
-  enableDragScroll(document.getElementById("portfolio-grid"));
+  // ✅ 문서 로드 후 적용
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+      enableDragScroll(document.getElementById("carousel-wrapper"));
+      enableDragScroll(document.getElementById("portfolio-grid"));
+      console.log("✅ 안전한 드래그 스크롤 활성화");
+    });
+  } else {
+    enableDragScroll(document.getElementById("carousel-wrapper"));
+    enableDragScroll(document.getElementById("portfolio-grid"));
+    console.log("✅ 안전한 드래그 스크롤 활성화");
+  }
 })();
