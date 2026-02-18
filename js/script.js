@@ -77,10 +77,10 @@ faqItems.forEach(item => {
 // ========== 데이터베이스 저장 함수 ==========
 async function saveToDatabase(data) {
     try {
-        // db 변수 확인
-        if (typeof db === 'undefined') {
+        // Firebase db 확인
+        if (typeof window.db === 'undefined') {
             console.error('❌ Firebase db가 초기화되지 않았습니다');
-            alert('시스템 오류입니다. 페이지를 새로고침해주세요.');
+            alert('페이지를 새로고침해주세요.');
             return;
         }
 
@@ -101,12 +101,12 @@ async function saveToDatabase(data) {
         };
         
         // 1️⃣ Firebase에 저장
-        const newRef = db.ref('submissions').push();
+        const newRef = window.db.ref('submissions').push();
         await newRef.set(dbData);
         console.log('✅ Firebase 저장 완료:', newRef.key);
         
         // 2️⃣ Google Apps Script를 통해 Telegram 전송
-        const response = await fetch('https://script.google.com/macros/s/AKfycbyKIolOQRbT95A-qTOZNlCXckkYVvFhLIcrG_1UZIib5Lp30FExYUDvqIu5rNjJp6nhIw/exec', {
+        const telegramResponse = await fetch('https://script.google.com/macros/s/AKfycbyKIolOQRbT95A-qTOZNlCXckkYVvFhLIcrG_1UZIib5Lp30FExYUDvqIu5rNjJp6nhIw/exec', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({
@@ -121,10 +121,6 @@ async function saveToDatabase(data) {
             })
         });
         
-        if (!response.ok) {
-            console.warn('⚠️ Telegram 전송 응답 상태:', response.status);
-        }
-        
         console.log('✅ 텔레그램 전송 완료');
         
         contactForm.reset();
@@ -133,8 +129,7 @@ async function saveToDatabase(data) {
         
     } catch (error) {
         console.error('❌ 오류 발생:', error);
-        console.error('오류 상세:', error.message);
-        alert('신청 중 오류가 발생했습니다. 다시 시도해주세요.\n' + error.message);
+        alert('신청 중 오류가 발생했습니다.\n' + error.message);
     } finally {
         const submitBtn = contactForm.querySelector('button[type="submit"]');
         submitBtn.disabled = false;
