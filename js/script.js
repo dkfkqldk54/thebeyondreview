@@ -98,26 +98,22 @@ async function saveToDatabase(data) {
         await newRef.set(dbData);
         console.log('✅ Firebase 저장 완료');
         
-        // 2️⃣ 텔레그램으로 메시지 전송
-        const telegramMessage = `🎬 새로운 신청이 들어왔습니다!
+         // 2️⃣ Send Telegram notification via Google Apps Script
+         await fetch('https://script.google.com/macros/s/AKfycbyjdESMeYltdUe5raTvAdYW6uVRnwSASwxhIgMBEWzSqQJrWbZrLxAT0YXHpR_30Z4lWg/exec', {
+             method: 'POST',
+             headers: {'Content-Type': 'application/json'},
+             body: JSON.stringify({
+                 storeName: data.storeName,
+                 phone: data.phone,
+                 email: data.email || 'N/A',
+                 category: data.category,
+                 package: data.package,
+                 timing: data.timing || 'N/A',
+                 message: data.message || 'N/A',
+                 submittedAt: new Date().toLocaleString('ko-KR')
+             })
+         });
 
-📍 매장명: ${data.storeName}
-📞 연락처: ${data.phone}
-📧 이메일: ${data.email || 'N/A'}
-📂 카테고리: ${data.category}
-🎯 패키지: ${data.package}
-📅 촬영 기간: ${data.timing || 'N/A'}
-💬 메시지: ${data.message || 'N/A'}
-⏰ 신청 시간: ${new Date().toLocaleString('ko-KR')}`;
-        
-        await fetch('https://cors-anywhere.herokuapp.com/https://api.telegram.org/bot8407881968:AAGgwdEfCMYTz7cYQy8aKj8cC7mLd9TlMiQ/sendMessage', {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({
-                chat_id: 6582764111,
-                text: telegramMessage
-            })
-        });
         console.log('✅ 텔레그램 전송 완료');
         
         contactForm.reset();
