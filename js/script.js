@@ -77,6 +77,13 @@ faqItems.forEach(item => {
 // ========== 데이터베이스 저장 함수 ==========
 async function saveToDatabase(data) {
     try {
+        // db 변수 확인
+        if (typeof db === 'undefined') {
+            console.error('❌ Firebase db가 초기화되지 않았습니다');
+            alert('시스템 오류입니다. 페이지를 새로고침해주세요.');
+            return;
+        }
+
         const submitBtn = contactForm.querySelector('button[type="submit"]');
         submitBtn.disabled = true;
         submitBtn.textContent = '신청 중...';
@@ -96,24 +103,28 @@ async function saveToDatabase(data) {
         // 1️⃣ Firebase에 저장
         const newRef = db.ref('submissions').push();
         await newRef.set(dbData);
-        console.log('✅ Firebase 저장 완료');
+        console.log('✅ Firebase 저장 완료:', newRef.key);
         
-         // 2️⃣ Send Telegram notification via Google Apps Script
-         await fetch('https://script.google.com/macros/s/AKfycbyjdESMeYltdUe5raTvAdYW6uVRnwSASwxhIgMBEWzSqQJrWbZrLxAT0YXHpR_30Z4lWg/exec', {
-             method: 'POST',
-             headers: {'Content-Type': 'application/json'},
-             body: JSON.stringify({
-                 storeName: data.storeName,
-                 phone: data.phone,
-                 email: data.email || 'N/A',
-                 category: data.category,
-                 package: data.package,
-                 timing: data.timing || 'N/A',
-                 message: data.message || 'N/A',
-                 submittedAt: new Date().toLocaleString('ko-KR')
-             })
-         });
-
+        // 2️⃣ Google Apps Script를 통해 Telegram 전송
+        const response = await fetch('https://script.google.com/macros/s/AKfycbyjdESMeYltdUe5raTvAdYW6uVRnwSASwxhIgMBEWzSqQJrWbZrLxAT0YXHpR_30Z4lWg/exec', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                storeName: data.storeName,
+                phone: data.phone,
+                email: data.email || 'N/A',
+                category: data.category,
+                package: data.package,
+                timing: data.timing || 'N/A',
+                message: data.message || 'N/A',
+                submittedAt: new Date().toLocaleString('ko-KR')
+            })
+        });
+        
+        if (!response.ok) {
+            console.warn('⚠️ Telegram 전송 응답 상태:', response.status);
+        }
+        
         console.log('✅ 텔레그램 전송 완료');
         
         contactForm.reset();
@@ -121,14 +132,16 @@ async function saveToDatabase(data) {
         document.body.style.overflow = 'hidden';
         
     } catch (error) {
-        console.error('❌ 오류:', error);
-        alert('신청 중 오류가 발생했습니다. 다시 시도해주세요.');
+        console.error('❌ 오류 발생:', error);
+        console.error('오류 상세:', error.message);
+        alert('신청 중 오류가 발생했습니다. 다시 시도해주세요.\n' + error.message);
     } finally {
         const submitBtn = contactForm.querySelector('button[type="submit"]');
         submitBtn.disabled = false;
         submitBtn.textContent = '신청 완료';
     }
 }
+
 
 // ========== 폼 검증 및 제출 ==========
 contactForm.addEventListener('submit', (e) => {
