@@ -115,11 +115,10 @@ async function saveToDatabase(data) {
     await newRef.set(dbData);
     console.log('✅ Firebase 저장 완료:', newRef.key);
 
-    // 2️⃣ Google Apps Script를 통해 Telegram 전송
-    await fetch('https://script.google.com/macros/s/AKfycbyKIolOQRbT95A-qTOZNlCXckkYVvFhLIcrG_1UZIib5Lp30FExYUDvqIu5rNjJp6nhIw/exec', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
+    // 2️⃣ Google Apps Script를 통해 Telegram 전송 (CORS 회피: form-urlencoded)
+    //    ✅ 텔레그램 전송이 실패해도 Firebase 저장은 성공이므로 "전체 실패"로 만들지 않음
+    try {
+      const payload = {
         storeName: data.storeName,
         phone: data.phone,
         email: data.email || 'N/A',
@@ -128,10 +127,22 @@ async function saveToDatabase(data) {
         timing: data.timing || 'N/A',
         message: data.message || 'N/A',
         submittedAt: new Date().toLocaleString('ko-KR')
-      })
-    });
+      };
+    
+      const body = new URLSearchParams(payload);
+    
+      await fetch('https://script.google.com/macros/s/AKfycbyKIolOQRbT95A-qTOZNlCXckkYVvFhLIcrG_1UZIib5Lp30FExYUDvqIu5rNjJp6nhIw/exec', {
+        method: 'POST',
+        // ⚠️ headers를 "application/json"으로 두면 preflight 떠서 CORS로 막힐 수 있음
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+        body: body.toString()
+      });
+    
+      console.log('✅ 텔레그램 전송 완료');
+    } catch (err) {
+      console.warn('⚠️ 텔레그램 전송 실패(무시하고 진행):', err);
+    }
 
-    console.log('✅ 텔레그램 전송 완료');
 
     contactForm.reset();
     if (successModal) {
