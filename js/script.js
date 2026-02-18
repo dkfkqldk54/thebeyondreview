@@ -156,7 +156,7 @@ async function saveToDatabase(data) {
       const submitBtn = contactForm.querySelector('button[type="submit"]');
       if (submitBtn) {
         submitBtn.disabled = false;
-        submitBtn.textContent = '신청 완료';
+        submitBtn.textContent = '신청하기';
       }
     }
   }
