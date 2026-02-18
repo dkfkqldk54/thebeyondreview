@@ -77,55 +77,57 @@ faqItems.forEach(item => {
 // ========== 데이터베이스 저장 함수 ==========
 async function saveToDatabase(data) {
     try {
-        // 제출 버튼 비활성화
         const submitBtn = contactForm.querySelector('button[type="submit"]');
         submitBtn.disabled = true;
-        submitBtn.textContent = '제출 중...';
+        submitBtn.textContent = '신청 중...';
         
-        // DB에 저장할 데이터 구성
         const dbData = {
             storeName: data.storeName,
             phone: data.phone,
-            email: data.email || '',
+            email: data.email || 'N/A',
             category: data.category,
             package: data.package,
-            timing: data.timing,
-            message: data.message || '',
-            privacy: data.privacy === 'on',
-            marketing: data.marketing === 'on',
-            submittedAt: new Date().toISOString()
+            timing: data.timing || 'N/A',
+            message: data.message || 'N/A',
+            submittedAt: new Date().toLocaleString('ko-KR'),
+            timestamp: new Date().toISOString()
         };
         
-        console.log('저장할 데이터:', dbData);
+        // 1️⃣ Firebase에 저장
+        const newRef = db.ref('submissions').push();
+        await newRef.set(dbData);
+        console.log('✅ Firebase 저장 완료');
         
-        // RESTful Table API로 데이터 저장
-        const response = await fetch('tables/inquiries', {
+        // 2️⃣ 텔레그램으로 메시지 전송
+        const telegramMessage = `🎬 새로운 신청이 들어왔습니다!
+
+📍 매장명: ${data.storeName}
+📞 연락처: ${data.phone}
+📧 이메일: ${data.email || 'N/A'}
+📂 카테고리: ${data.category}
+🎯 패키지: ${data.package}
+📅 촬영 기간: ${data.timing || 'N/A'}
+💬 메시지: ${data.message || 'N/A'}
+⏰ 신청 시간: ${new Date().toLocaleString('ko-KR')}`;
+        
+        await fetch('https://api.telegram.org/bot8407881968:AAGgwdEfCMYTz7cYQy8aKj8cC7mLd9TlMiQ/sendMessage', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(dbData)
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+                chat_id: 6582764111,
+                text: telegramMessage
+            })
         });
+        console.log('✅ 텔레그램 전송 완료');
         
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const result = await response.json();
-        console.log('저장 성공:', result);
-        
-        // 폼 초기화
         contactForm.reset();
-        
-        // 성공 모달 표시
         successModal.classList.add('active');
         document.body.style.overflow = 'hidden';
         
     } catch (error) {
-        console.error('저장 실패:', error);
-        alert('신청서 제출 중 오류가 발생했습니다. 다시 시도해주세요.\n\n또는 직접 연락주세요:\n📞 010-2275-6039\n📧 thebeyondreivew@gmail.com');
+        console.error('❌ 오류:', error);
+        alert('신청 중 오류가 발생했습니다. 다시 시도해주세요.');
     } finally {
-        // 제출 버튼 다시 활성화
         const submitBtn = contactForm.querySelector('button[type="submit"]');
         submitBtn.disabled = false;
         submitBtn.textContent = '신청 완료';
