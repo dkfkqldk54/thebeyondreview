@@ -1847,3 +1847,9 @@ section {
 #portfolio-grid.is-dragging a {
   pointer-events: none;  /* 드래그 중 링크 오작동 방지 */
 }
+
+#carousel-wrapper,
+#portfolio-grid {
+  touch-action: pan-y; /* 세로 스크롤은 살리고 가로 드래그만 허용 */
+}
+
