@@ -12,6 +12,7 @@ const successModal = document.getElementById('success-modal');
 const closeModalBtn = document.getElementById('close-modal');
 const faqItems = document.querySelectorAll('.faq-item');
 const loadMoreBtn = document.getElementById('load-more');
+const portfolioGrid = document.getElementById('portfolio-grid');
 
 // ========== 네비게이션 스크롤 효과 ==========
 window.addEventListener('scroll', () => {
@@ -314,7 +315,6 @@ if (portfolioGrid) {
 
 // ========== 포트폴리오 더보기 기능 ==========
 let portfolioItemsVisible = 9;
-const portfolioGrid = document.getElementById('portfolio-grid');
 
 // 추가 포트폴리오 아이템 데이터
 const additionalPortfolioItems = [
