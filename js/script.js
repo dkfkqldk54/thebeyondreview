@@ -237,105 +237,6 @@ document.addEventListener('keydown', (e) => {
   }
 });
 
-// ========== 캐러셀 드래그 스크롤 기능 ==========
-const carouselWrapper = document.getElementById('carousel-wrapper');
-
-if (carouselWrapper) {
-  let isDown = false;
-  let startX;
-  let scrollLeft;
-
-  carouselWrapper.addEventListener('mousedown', (e) => {
-    isDown = true;
-    carouselWrapper.style.cursor = 'grabbing';
-    startX = e.pageX - carouselWrapper.offsetLeft;
-    scrollLeft = carouselWrapper.scrollLeft;
-  });
-
-  carouselWrapper.addEventListener('mouseleave', () => {
-    isDown = false;
-    carouselWrapper.style.cursor = 'grab';
-  });
-
-  carouselWrapper.addEventListener('mouseup', () => {
-    isDown = false;
-    carouselWrapper.style.cursor = 'grab';
-  });
-
-  carouselWrapper.addEventListener('mousemove', (e) => {
-    if (!isDown) return;
-    e.preventDefault();
-    const x = e.pageX - carouselWrapper.offsetLeft;
-    const walk = (x - startX) * 2;
-    carouselWrapper.scrollLeft = scrollLeft - walk;
-  });
-
-  // 터치 이벤트
-  let touchStartX = 0;
-  let touchScrollLeft = 0;
-
-  carouselWrapper.addEventListener('touchstart', (e) => {
-    touchStartX = e.touches[0].pageX - carouselWrapper.offsetLeft;
-    touchScrollLeft = carouselWrapper.scrollLeft;
-  }, { passive: true });
-
-  carouselWrapper.addEventListener('touchmove', (e) => {
-    const x = e.touches[0].pageX - carouselWrapper.offsetLeft;
-    const walk = (x - touchStartX) * 2;
-    carouselWrapper.scrollLeft = touchScrollLeft - walk;
-  }, { passive: true });
-}
-
-// ========== 포트폴리오 그리드 드래그 스크롤 ==========
-if (portfolioGrid) {
-  let isDown = false;
-  let startX;
-  let scrollLeft;
-
-  portfolioGrid.addEventListener('mousedown', (e) => {
-    if (e.target.closest('a')) return;
-
-    isDown = true;
-    portfolioGrid.style.cursor = 'grabbing';
-    startX = e.pageX - portfolioGrid.offsetLeft;
-    scrollLeft = portfolioGrid.scrollLeft;
-    e.preventDefault();
-  });
-
-  portfolioGrid.addEventListener('mouseleave', () => {
-    isDown = false;
-    portfolioGrid.style.cursor = 'grab';
-  });
-
-  portfolioGrid.addEventListener('mouseup', () => {
-    isDown = false;
-    portfolioGrid.style.cursor = 'grab';
-  });
-
-  portfolioGrid.addEventListener('mousemove', (e) => {
-    if (!isDown) return;
-    e.preventDefault();
-    const x = e.pageX - portfolioGrid.offsetLeft;
-    const walk = (x - startX) * 2;
-    portfolioGrid.scrollLeft = scrollLeft - walk;
-  });
-
-  // 터치 이벤트
-  let touchStartX;
-  let touchScrollLeft;
-
-  portfolioGrid.addEventListener('touchstart', (e) => {
-    touchStartX = e.touches[0].pageX - portfolioGrid.offsetLeft;
-    touchScrollLeft = portfolioGrid.scrollLeft;
-  }, { passive: true });
-
-  portfolioGrid.addEventListener('touchmove', (e) => {
-    const x = e.touches[0].pageX - portfolioGrid.offsetLeft;
-    const walk = (x - touchStartX) * 2;
-    portfolioGrid.scrollLeft = touchScrollLeft - walk;
-  }, { passive: true });
-}
-
 // ========== 포트폴리오 더보기 기능 ==========
 let portfolioItemsVisible = 9;
 
@@ -652,15 +553,20 @@ window.addEventListener('load', () => {
 
     const onMove = (pageX) => {
       if (!isDown) return;
-      const walk = (pageX - startX) * 1.2;
-      if (Math.abs(walk) > 2) moved = true;
-      container.scrollLeft = startScrollLeft - walk;
+      const walk = pageX - startX;
+    
+      // 👉 10px 이상 움직여야 드래그로 판단
+      if (Math.abs(walk) > 10) moved = true;
+    
+      container.scrollLeft = startScrollLeft - walk * 1.2;
     };
 
     const onUp = () => {
       isDown = false;
       container.classList.remove("is-dragging");
       container.style.cursor = "grab";
+      // moved는 유지해도 되지만, 클릭 리셋까지 하면 더 안전
+      // moved = false;  // (선택) 클릭에서 리셋하면 이건 없어도 됨
     };
 
     // Mouse
@@ -674,10 +580,12 @@ window.addEventListener('load', () => {
     container.addEventListener("touchmove", (e) => onMove(e.touches[0].pageX), { passive: true });
     container.addEventListener("touchend", onUp);
 
-    // Prevent accidental link click after drag
     container.querySelectorAll("a").forEach((a) => {
       a.addEventListener("click", (e) => {
-        if (moved) e.preventDefault();
+        if (moved) {
+          e.preventDefault();
+          moved = false; // ✅ 다음 정상 클릭을 위해 리셋
+        }
       });
     });
   }
