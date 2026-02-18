@@ -1,4 +1,3 @@
-```js
 // ===============================
 // ✅ 안전 이벤트 바인딩 (요소가 없으면 그냥 스킵)
 // ===============================
@@ -351,17 +350,19 @@ on(loadMoreBtn, 'click', () => {
 
     const portfolioItem = document.createElement('div');
     portfolioItem.className = 'portfolio-item fade-in-up';
-    
+
+    // ✅ 템플릿리터럴 대신 문자열 결합 (구형 브라우저/빌드 이슈 방지)
     portfolioItem.innerHTML =
       '<div class="portfolio-thumbnail">' +
-      '<i class="fas fa-play-circle"></i>' +
-      '<div class="portfolio-overlay">' +
-      '<div class="portfolio-stats">' +
-      '<span class="views">👁️ ' + item.views + '</span>' +
-      '<span class="location">📍 ' + item.location + '</span>' +
-      '</div>' +
-      '</div>' +
+        '<i class="fas fa-play-circle"></i>' +
+        '<div class="portfolio-overlay">' +
+          '<div class="portfolio-stats">' +
+            '<span class="views">👁️ ' + item.views + '</span>' +
+            '<span class="location">📍 ' + item.location + '</span>' +
+          '</div>' +
+        '</div>' +
       '</div>';
+
     portfolioGrid.appendChild(portfolioItem);
   }
 
@@ -376,17 +377,23 @@ const observerOptions = {
   rootMargin: '0px 0px -100px 0px'
 };
 
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('fade-in-up');
-      observer.unobserve(entry.target);
-    }
-  });
-}, observerOptions);
-
 const animateElements = document.querySelectorAll('.card, .stat-card, .package-card, .portfolio-item');
-animateElements.forEach(el => observer.observe(el));
+
+if ('IntersectionObserver' in window) {
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('fade-in-up');
+        obs.unobserve(entry.target);
+      }
+    });
+  }, observerOptions);
+
+  animateElements.forEach(el => observer.observe(el));
+} else {
+  // 구형 브라우저 폴백
+  animateElements.forEach(el => el.classList.add('fade-in-up'));
+}
 
 // ========== 전화번호 자동 포맷팅 ==========
 const phoneInput = document.getElementById('phone');
@@ -426,7 +433,7 @@ document.addEventListener('DOMContentLoaded', () => {
   console.log('BEYOND REVIEW 웹사이트가 로드되었습니다.');
 
   const submissions = JSON.parse(localStorage.getItem('submissions') || '[]');
-  console.log(`총 ${submissions.length}개의 신청이 있습니다.`);
+  console.log('총 ' + submissions.length + '개의 신청이 있습니다.');
 
   // 이미지 로드 에러 처리
   const allImages = document.querySelectorAll('.video-thumbnail-img, .portfolio-bg-img');
@@ -527,7 +534,7 @@ window.addEventListener('scroll', () => {
 
   navLinks.forEach(link => {
     link.classList.remove('active');
-    if (link.getAttribute('href') === `#${current}`) link.classList.add('active');
+    if (link.getAttribute('href') === '#'+current) link.classList.add('active');
   });
 });
 
@@ -548,16 +555,16 @@ function showLoadingSpinner() {
 }
 
 // ========== 디버깅 및 개발자 정보 ==========
-console.log(`
-╔══════════════════════════════════════════════╗
-║         BEYOND REVIEW 웹사이트               ║
-║       릴스 마케팅 전문 에이전시               ║
-║                                              ║
-║  개발: AI Developer                          ║
-║  버전: 1.0.0                                 ║
-║  날짜: 2026-02-14                            ║
-╚══════════════════════════════════════════════╝
-`);
+console.log(
+  "╔══════════════════════════════════════════════╗\n" +
+  "║         BEYOND REVIEW 웹사이트               ║\n" +
+  "║       릴스 마케팅 전문 에이전시               ║\n" +
+  "║                                              ║\n" +
+  "║  개발: AI Developer                          ║\n" +
+  "║  버전: 1.0.0                                 ║\n" +
+  "║  날짜: 2026-02-14                            ║\n" +
+  "╚══════════════════════════════════════════════╝"
+);
 
 // ========== 성능 최적화: 이미지 레이지 로딩 ==========
 if ('loading' in HTMLImageElement.prototype) {
@@ -603,7 +610,7 @@ window.addEventListener('popstate', () => {
 window.addEventListener('load', () => {
   console.log('✅ 모든 리소스 로드 완료');
   console.log('📊 성능 정보:', {
-    loadTime: `${performance.now().toFixed(2)}ms`,
+    loadTime: performance.now().toFixed(2) + 'ms',
     resources: performance.getEntriesByType('resource').length
   });
 });
@@ -667,4 +674,3 @@ window.addEventListener('load', () => {
   enableDragScroll(document.getElementById("carousel-wrapper"));
   enableDragScroll(document.getElementById("portfolio-grid"));
 })();
-```
