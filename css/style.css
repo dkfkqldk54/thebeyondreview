@@ -1900,3 +1900,22 @@ section {
 }
 
 /* 성과 섹션 배지 가운데 정렬 */ .creator-badges{ display: flex; justify-content: center; /* 핵심 */ align-items: center; gap: 14px; flex-wrap: wrap; /* 화면 좁으면 줄바꿈 */ margin: 14px 0 10px; text-align: center; } /* 배지 자체(선택) */ .creator-badges .badge{ display: inline-flex; align-items: center; gap: 6px; }
+
+/* 성과 섹션 배지 가운데 정렬 */
+.performance .trust-badges{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+  margin: 14px 0 10px;
+  text-align: center;
+}
+
+/* 성과 섹션 배지는 흰 배경이라 기존 hero용 스타일이 흐릴 수 있음(선택) */
+.performance .trust-badge{
+  background: rgba(255, 107, 53, 0.08);
+  border: 1px solid rgba(255, 107, 53, 0.20);
+  color: var(--text-dark);
+  backdrop-filter: none;
+}
