@@ -1895,3 +1895,6 @@ section {
   backdrop-filter: blur(6px);
 }
 
+.hero-title{
+  margin-bottom: 14px;
+}
