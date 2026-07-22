@@ -1575,35 +1575,22 @@ section {
         font-size: 12px;
     }
 
-    /* Package - Horizontal Scroll */
+    /* Hide floating action buttons on mobile (inline CTAs cover the same purpose) */
+    .floating-buttons {
+        display: none !important;
+    }
+
+    /* Package - Vertical Stack (mobile-friendly) */
     .package-grid {
         display: flex;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        gap: 16px;
-        padding: 20px 0 30px;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: thin;
-    }
-
-    .package-grid::-webkit-scrollbar {
-        height: 6px;
-    }
-
-    .package-grid::-webkit-scrollbar-track {
-        background: rgba(0,0,0,0.05);
-        border-radius: 10px;
-    }
-
-    .package-grid::-webkit-scrollbar-thumb {
-        background: var(--primary-color);
-        border-radius: 10px;
+        flex-direction: column;
+        gap: 20px;
+        padding: 10px 0 20px;
     }
 
     .package-card {
-        flex: 0 0 300px;
-        scroll-snap-align: center;
-        min-width: 300px;
+        width: 100%;
+        min-width: 0;
     }
 
     .package-card .package-header {
@@ -1611,18 +1598,34 @@ section {
     }
 
     .package-card .package-body {
-        padding: 20px;
+        padding: 22px 20px;
     }
 
-   .package-card .package-body ul li {
-       font-size: 13px;
-       padding: 8px 0;
-       padding-left: 28px;  /* ✅ 추가 */
-       line-height: 1.5;    /* ✅ 1.4 -> 1.5 */
-   }
+    .package-card .package-body ul li {
+        font-size: 15px;
+        padding: 10px 0 10px 28px;
+        line-height: 1.55;
+    }
+
+    .package-card .package-target {
+        font-size: 15px;
+    }
+
+    .package-name {
+        font-size: 22px;
+    }
+
+    .price-amount {
+        font-size: 32px;
+    }
 
     .package-card .package-footer {
         padding: 20px;
+    }
+
+    .package-card .package-footer .btn {
+        font-size: 16px;
+        padding: 14px 0;
     }
 
     /* Portfolio */
