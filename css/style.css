@@ -1551,18 +1551,21 @@ section {
         font-weight: 600;
     }
 
-    /* Stats */
+    /* Stats — 1 column on narrow mobile so 1,000,000+ fits comfortably */
     .stats-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
+        grid-template-columns: 1fr;
+        gap: 12px;
+        max-width: 360px;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .stat-card {
-        padding: 24px 16px;
+        padding: 22px 20px;
     }
 
     .stat-number {
-        font-size: 28px;
+        font-size: 34px;
         margin-bottom: 8px;
     }
 
@@ -1923,3 +1926,47 @@ section {
   color: var(--text-dark);
   backdrop-filter: none;
 }
+
+/* ============================================================
+   Mobile readability pass — bump fonts without breaking layout
+   ============================================================ */
+@media (max-width: 767px) {
+  /* Hero */
+  .hero-title { font-size: 30px; line-height: 1.25; }
+  .hero-subtitle { font-size: 17px; line-height: 1.5; }
+  .hero-description p { font-size: 16px; line-height: 1.65; }
+  .hero-value { font-size: 17px; }
+
+  /* Section headers */
+  .section-title { font-size: 32px; line-height: 1.25; }
+  .section-subtitle { font-size: 17px; line-height: 1.6; }
+
+  /* Why-reel cards */
+  .card .card-title { font-size: 17px; line-height: 1.4; }
+  .card .card-text { font-size: 15px; line-height: 1.65; }
+  .card .card-stat { font-size: 14px; }
+
+  /* Performance stats (keep numbers 28px to fit 2-col grid on 390px viewport) */
+  .stat-label { font-size: 16px; }
+  .stat-desc { font-size: 14px; line-height: 1.5; }
+  .performance-footer { font-size: 16px; line-height: 1.7; }
+
+  /* Portfolio */
+  .video-info h3 { font-size: 22px; line-height: 1.35; }
+  .video-info p { font-size: 15px; line-height: 1.55; }
+  .view-count { font-size: 18px; }
+
+  /* FAQ */
+  .faq-question { font-size: 17px; line-height: 1.45; }
+  .faq-answer, .faq-answer p, .faq-answer li { font-size: 15px; line-height: 1.7; }
+
+  /* Buttons (bigger tap targets + readability) */
+  .btn { font-size: 16px; }
+  .btn-lg { font-size: 18px; padding: 18px 28px; }
+
+  /* Footer */
+  .footer-desc, .footer-contact p, .footer-links a { font-size: 15px; }
+  .footer-title { font-size: 20px; }
+  .footer-subtitle { font-size: 16px; }
+}
+
