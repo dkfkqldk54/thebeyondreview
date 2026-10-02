@@ -43,7 +43,7 @@ nav .links a{text-decoration:none;color:var(--ink2)}
 
 /* hero */
 .hero{padding-block:56px 72px}
-.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+.hero .wrap{max-width:820px}
 .hero h1{font-size:clamp(34px,6.2vw,58px);font-weight:900}
 .hero h1 em{font-style:normal;background:linear-gradient(transparent 62%,var(--accent-soft) 62%)}
 .hero .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
@@ -104,8 +104,8 @@ nav .links a{text-decoration:none;color:var(--ink2)}
 .dash{background:#fff;border:1px solid var(--line);border-radius:22px;padding:22px;margin-top:32px;position:relative}
 .dash .tag{position:absolute;top:16px;right:18px;font-size:12px;font-weight:800;background:var(--accent-soft);color:var(--accent);padding:4px 10px;border-radius:999px}
 .dash .top{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px}
-.dash .top span{font-size:13px;border:1px solid var(--line);border-radius:999px;padding:5px 12px;color:var(--ink2)}
-.dash .top span.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.dash .top button{font:inherit;font-size:13px;background:#fff;cursor:pointer;border:1px solid var(--line);border-radius:999px;padding:5px 12px;color:var(--ink2)}
+.dash .top button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
 .kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
 .kpi{background:var(--paper);border-radius:14px;padding:14px}
 .kpi small{color:var(--muted);font-size:12.5px}.kpi b{display:block;font-size:22px;font-weight:900;font-variant-numeric:tabular-nums}
@@ -177,24 +177,6 @@ footer a{color:var(--muted)}
       <a class="btn btn-line" href="#guarantee">못 지키면 100% 환불</a>
     </div>
   </div>
-  <div class="stack" aria-label="비욘드리뷰 쓰레드 첫 글">
-    <div class="tcard"><div class="who"><span class="av food">B</span><b>thebeyondreview</b><small>· 식당</small></div>
-      <p>식당 사장님들.
-제가 한 달 동안
-가게 스레드 키워드릴게요.
-
-못 키우면 전액 환불합니다.</p></div>
-    <div class="tcard"><div class="who"><span class="av food">B</span><b>thebeyondreview</b><small>· 식당</small></div>
-      <p>① 한 달 조회수 최소 1만
-② 매일 1개 이상 업로드
-③ 댓글 100% 응대
-
-하나라도 못 지키면 전액 환불</p></div>
-    <div class="tcard"><div class="who"><span class="av food">B</span><b>thebeyondreview</b><small>· 식당</small></div>
-      <p>직접 사진 촬영하러 갑니다.
-글 쓰고, 올리고, 댓글 다는 것도
-제가 다 합니다.</p></div>
-  </div>
 </div></header>
 
 <section id="guarantee" style="padding-top:0"><div class="wrap">
@@ -203,7 +185,7 @@ footer a{color:var(--muted)}
     <h2>세 가지를 약속합니다.</h2>
     <div class="g3">
       <div><b>매일 1편 이상</b><span>30일 동안 매일 최소 1편씩 글을 올립니다.</span></div>
-      <div><b>댓글 100% 응대</b><span>달리는 댓글엔 가게 정보를 바탕으로 전부 답합니다. 중요한 건 사장님께 먼저 여쭙고 정합니다.</span></div>
+      <div><b>댓글 100% 응대</b><span>달리는 댓글엔 가게 사장님 입장에서 전부 답합니다.</span></div>
       <div><b>한 달 조회 최소 1만</b><span>30일 합계 조회수 1만을 넘깁니다.</span></div>
     </div>
     <p class="refund">이 중 하나라도 못 지키면 <em>전액 환불</em>합니다.</p>
@@ -214,10 +196,10 @@ footer a{color:var(--muted)}
   <div class="eyebrow">진행 방식</div>
   <h2>사장님은 장사만 하시면 됩니다.</h2>
   <div class="flow">
-    <div class="step"><h3>계정 연결</h3><p>비밀번호는 받지 않습니다. 쓰레드 앱에서 초대 수락, 링크에서 '허용'만 누르시면 됩니다.</p></div>
+    <div class="step"><h3>상담</h3><p>카톡이나 전화로 가게 위치와 메뉴를 알려 주세요.</p></div>
     <div class="step"><h3>직접 촬영</h3><p>가게로 찾아가 메뉴, 매장, 재료 사진을 직접 찍습니다. 서울 지역만 가능합니다.</p></div>
     <div class="step"><h3>매일 작성</h3><p>손님이 궁금해할 얘기로 하루 1편 이상 기획하고 올립니다.</p></div>
-    <div class="step"><h3>댓글 응대</h3><p>가게 정보로 답글을 답니다. 예약, 가격, 이벤트처럼 중요한 건 사장님께 먼저 확인합니다.</p></div>
+    <div class="step"><h3>댓글 응대</h3><p>손님 댓글에 가게 사장님처럼 바로바로 답합니다.</p></div>
     <div class="step"><h3>실시간 보고</h3><p>조회, 글, 댓글, 답글, 팔로워를 전용 페이지에서 언제든 보실 수 있습니다.</p></div>
   </div>
 </div></section>
@@ -225,23 +207,21 @@ footer a{color:var(--muted)}
 <section style="padding-top:0"><div class="wrap">
   <div class="eyebrow">실시간 성과 페이지</div>
   <h2>보고서를 기다리지 않으셔도 됩니다.</h2>
-  <p class="lead">사장님 전용 주소로 들어가면 지금까지의 숫자가 그대로 보입니다. Threads 공식 API에서 1시간마다 가져옵니다.</p>
+  <p class="lead">사장님 전용 주소로 들어가면 지금까지의 숫자가 그대로 보입니다. 오늘, 7일, 30일, 전체로 눌러서 보실 수 있습니다.</p>
   <div class="dash" aria-label="성과 페이지 예시 화면">
     <span class="tag">예시 화면</span>
-    <div class="top"><span>오늘</span><span>7일</span><span class="on">30일</span><span>전체</span></div>
+    <div class="top" role="tablist"><button type="button" data-p="d1">오늘</button><button type="button" data-p="d7">7일</button><button type="button" data-p="d30" class="on">30일</button><button type="button" data-p="all">전체</button></div>
     <div class="kpis">
-      <div class="kpi"><small>조회 합계</small><b>12,480</b></div>
-      <div class="kpi"><small>올린 글</small><b>34편</b></div>
-      <div class="kpi"><small>좋아요</small><b>418</b></div>
-      <div class="kpi"><small>댓글 · 답글</small><b>57 · 57</b></div>
-      <div class="kpi"><small>팔로워</small><b>+41</b></div>
+      <div class="kpi"><small>조회 합계</small><b id="k-v">12,480</b></div>
+      <div class="kpi"><small>올린 글</small><b id="k-p">34편</b></div>
+      <div class="kpi"><small>좋아요</small><b id="k-l">418</b></div>
+      <div class="kpi"><small>댓글 · 답글</small><b id="k-c">57 · 57</b></div>
+      <div class="kpi"><small>팔로워</small><b id="k-f">+41</b></div>
     </div>
-    <div class="bars" aria-hidden="true">
-      <i style="height:18%"></i><i style="height:22%"></i><i style="height:15%"></i><i style="height:30%"></i><i style="height:26%"></i><i style="height:34%"></i><i style="height:28%"></i><i style="height:40%"></i><i style="height:36%"></i><i class="hi" style="height:92%"></i><i style="height:48%"></i><i style="height:38%"></i><i style="height:44%"></i><i style="height:52%"></i>
-    </div>
+    <div class="bars" id="bars" aria-hidden="true"></div>
     <div class="cmts">
       <div class="cmt"><div class="q">손님 · "주말에도 점심 영업하나요?"</div><div class="a">네, 토·일 11시 반부터 합니다. 주말엔 1시 전에 오시면 덜 기다리세요.</div></div>
-      <div class="cmt"><div class="q">손님 · "단체 예약 10명 되나요?"</div><div class="a">사장님께 확인 후 답변드릴게요. <small style="color:var(--muted)">(중요 문의 · 사장님 확인 대기)</small></div></div>
+      <div class="cmt"><div class="q">손님 · "단체 예약 10명 되나요?"</div><div class="a">네, 10명까지 가능합니다. 방문 하루 전에 전화 주시면 자리 맞춰 두겠습니다.</div></div>
     </div>
   </div>
   <p class="note">위 화면의 숫자와 댓글은 예시입니다. 실제 페이지에는 사장님 계정 숫자가 들어갑니다.</p>
@@ -258,11 +238,10 @@ footer a{color:var(--muted)}
     <ul>
       <li>직접 방문 사진 촬영 (서울)</li>
       <li>매일 1편 이상 글 기획·작성·업로드</li>
-      <li>댓글 100% 응대 (중요 문의는 사장님 확인)</li>
+      <li>댓글 100% 응대</li>
       <li>한 달 조회 최소 1만 보장</li>
       <li>사장님 전용 실시간 성과 페이지</li>
-      <li>비밀번호 없이 계정 연결</li>
-    </ul>
+          </ul>
   </div>
 </div></section>
 
@@ -272,10 +251,8 @@ footer a{color:var(--muted)}
   <div class="faq">
     <details><summary>저는 뭘 준비하면 되나요?</summary><p>촬영 날 가게를 잠깐 열어 주시면 됩니다. 사진은 저희가 직접 찍으러 갑니다. 새 메뉴나 이벤트가 생기면 알려만 주세요.</p></details>
     <details><summary>어느 지역까지 되나요?</summary><p>지금은 직접 촬영을 가야 해서 서울 지역만 받습니다.</p></details>
-    <details><summary>계정 비밀번호를 알려줘야 하나요?</summary><p>아니요. 쓰레드 앱에서 초대를 수락하고, 저희가 보내 드리는 링크에서 '허용'을 누르시면 연결됩니다. 비밀번호는 받지 않습니다.</p></details>
     <details><summary>쓰레드 계정이 아직 없어요.</summary><p>인스타그램 계정이 있으면 쓰레드 계정을 바로 만들 수 있습니다. 처음 만드는 것부터 같이 도와드립니다.</p></details>
     <details><summary>조회 1만을 못 넘기면 어떻게 되나요?</summary><p>그 달 비용을 100% 환불합니다. 하루 1편 업로드나 댓글 응대를 못 지킨 경우도 같습니다.</p></details>
-    <details><summary>댓글에 제가 모르는 답이 달리면요?</summary><p>메뉴·영업시간처럼 정해진 정보는 저희가 답합니다. 예약, 가격, 이벤트, 불만처럼 중요한 건 사장님께 먼저 여쭙고 답합니다.</p></details>
     <details><summary>가격에 부가세가 포함인가요?</summary><p>네, 월 30만 원은 부가세 포함 가격입니다.</p></details>
     <details><summary>계약 기간이 있나요?</summary><p>한 달 단위입니다. 다음 달을 이어 갈지는 성과 페이지 숫자를 보고 정하시면 됩니다.</p></details>
   </div>
@@ -297,5 +274,26 @@ footer a{color:var(--muted)}
 </div></footer>
 
 <a class="btn btn-kakao float" href="https://open.kakao.com/o/sJZzdqQi" target="_blank" rel="noopener">카톡 상담</a>
+<script>
+(function(){
+  var D={
+    d1:{v:"612",p:"2편",l:"19",c:"4 · 4",f:"+3",b:[2,1,1,0,0,1,3,6,9,14,12,8,10,15,18,11,9,7,5,4,3,2,1,1]},
+    d7:{v:"3,140",p:"9편",l:"102",c:"15 · 15",f:"+12",b:[310,420,380,520,460,610,440]},
+    d30:{v:"12,480",p:"34편",l:"418",c:"57 · 57",f:"+41",b:[180,220,150,300,260,340,280,400,360,920,480,380,440,520,300,260,410,350,290,470,380,330,450,510,420,390,560,470,612,540]},
+    all:{v:"21,930",p:"61편",l:"736",c:"98 · 98",f:"+74",b:[1800,2600,3100,4300,4900,5230]}
+  };
+  var bars=document.getElementById("bars");
+  function show(key){
+    var d=D[key];
+    ["v","p","l","c","f"].forEach(function(x){document.getElementById("k-"+x).textContent=d[x];});
+    var mx=Math.max.apply(null,d.b),h="";
+    d.b.forEach(function(n){h+='<i'+(n===mx?' class="hi"':'')+' style="height:'+Math.max(3,Math.round(n/mx*100))+'%"></i>';});
+    bars.innerHTML=h;
+    document.querySelectorAll(".dash .top button").forEach(function(b){b.classList.toggle("on",b.dataset.p===key);});
+  }
+  document.querySelectorAll(".dash .top button").forEach(function(b){b.addEventListener("click",function(){show(b.dataset.p);});});
+  show("d30");
+})();
+</script>
 </body>
 </html>
