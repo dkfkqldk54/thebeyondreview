@@ -40,7 +40,8 @@ nav .wrap{display:flex;align-items:center;justify-content:space-between;height:6
 .logo span{color:var(--accent)}
 nav .links{display:flex;gap:22px;align-items:center;font-size:14px;font-weight:600}
 nav .links a{text-decoration:none;color:var(--ink2)}
-@media (max-width:720px){nav .links a:not(.btn){display:none}}
+.logo,.btn{white-space:nowrap}
+@media (max-width:720px){nav .links a:not(.btn),nav .links .btn-kakao{display:none}}
 
 /* hero */
 .hero{padding-block:56px 72px}
